@@ -1,0 +1,23 @@
+{
+  "name": "friendfinder",
+  "version": "1.0.0",
+  "description": "express",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kcalderon87/FriendFinder.git"
+  },
+  "author": "Kim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kcalderon87/FriendFinder/issues"
+  },
+  "homepage": "https://github.com/kcalderon87/FriendFinder#readme"
+}
