@@ -1,72 +1,59 @@
 var fData = require('../data/friends.js');
-var bodyParser = require('body-parser');
 var path = require('path');
 
-// ROUTING
-module.exports = function(app){
+// Routing
 
-	// API GET Requests
-	app.get('/api/friends', function(req, res){
-		res.status(200).json({message: 'connected.'})
-		res.json(fData);				
-	});
+module.exports = function(app) {
 
-	
-	// API POST Requests
-	app.post('/api/friends', function(req, res){
-		res.json(true);
-		//console.log(req.body);
-		console.log(fData);
+    // API GET Requests
 
-		//functions to return best match
-		var userMatch = {
-			'name': 'none',
-			'photo': 'none'
-		};
+//app.get returns simple data
+    app.get('/api/friends', function(req, res) {
+        console.log('connected');
+        console.log(fData);
+        res.json(fData);
 
-		function sum (array) {
-			var total = 0;
-			for (var j = 0; j < array.length; j++) {
-				total += parseInt(array[j]);
-				//console.log(array[n]);
-				//console.log(parseInt(total));
-			}
-			return total;
-		}
+    });
 
-		var userTotal = sum(req.body.scores);
+    // API POST Requests
 
+    app.post('/api/friends', function(req, res) {
 
-		//console.log(userTotal);
+        var body = req.body;
+        console.log(fData);
+        console.log(body);
 
-		var friendTotal = 0;
+        var bffScore = 50;
+        var bffIndex = 0;
 
-		for (var i = 0; i < fData.length; i++) {
-			friendTotal = sum(fData[i].scores);
-			//console.log(friendTotal);
-			if (friendTotal == userTotal) {
-				userMatch.name = fData[i].name;
-				userMatch.photo = fData[i].photo;
-			}
-		};
+        for (var i = 0; i < fData.length; i++) {
+        	
+            var currentdifference = totalDifference(fData[i].scores, body.scores)
 
-		if (userMatch.name == 'none') {
-			var closest = 50;
+            if (i == 0) {
+                bffIndex = i; //friend index
+                bffScore = currentdifference;
+            }
+            if (currentdifference < bffScore) {
+                bffIndex = i;
+                bffScore = currentdifference
+            }
 
-			for (var i = 0; i < fData.length; i++) {
-				friendTotal = sum(fData[i].scores);
-				var totalDifference = Math.abs(friendTotal - userTotal);
-				if ( totalDifference <= closest ){
-					closest = totalDifference;
-					userMatch.name = fData[i].name;
-					userMatch.photo = fData[i].photo;
-				};
-			};
-		};
-		console.log(userMatch);
-		res.json(userMatch);
+        }
 
-	});
+        
+        res.json(fData[bffIndex]);
+    });
+ 
+    function totalDifference(existing, newFriend) {
+        var difference = 0;
+        console.log('existing: ' + existing);
+        console.log('new: ' + newFriend);
 
-	
-};
+        for (i = 0; i < existing.length; i++) {
+            
+            difference += Math.abs(existing[i] - newFriend[i])
+        }
+        return difference;
+    }
+}
